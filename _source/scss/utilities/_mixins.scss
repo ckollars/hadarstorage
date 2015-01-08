@@ -1,0 +1,85 @@
+// Cross browser opacity
+@mixin opacity($opacity) {
+  opacity: $opacity;
+  $opacity-ie: $opacity * 100;
+  filter: alpha(opacity=$opacity-ie); //IE8
+}
+
+// Verticle align only works down to IE9
+@mixin vertical-align {
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+// REM font sizing. Doesn't have to reset HTML to 62.5% font size
+@function calculateRem($size) {
+  $remSize: $size / 16px;
+  @return #{$remSize}rem;
+}
+
+@mixin font-size($size) {
+  font-size: $size;
+  font-size: calculateRem($size);
+}
+
+// PX to EM conversion. Strips units then converts
+@function strip-units($val) {
+  @return ($val / ($val * 0 + 1));
+}
+
+@function em($pxval, $base: $base-font-size) {
+  @if not unitless($pxval) {
+      $pxval: strip-units($pxval);
+  }
+  @if not unitless($base) {
+      $base: strip-units($base);
+  }
+  @return ($pxval / $base) * 1em;
+}
+
+// Hide elements visually, but keep them available for screen-readers.
+//
+// Used for information required for screen-reader users to understand and use
+// the site where visual display is undesirable. Information provided in this
+// manner should be kept concise, to avoid unnecessary burden on the user.
+// "!important" is used to prevent unintentional overrides.
+@mixin element-invisible {
+  position: absolute !important;
+  clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+  clip: rect(1px, 1px, 1px, 1px);
+  overflow: hidden;
+  height: 1px;
+}
+
+// Hide elements from all users.//
+// Used for elements which should not be immediately displayed to any user. An
+// example would be a collapsible fieldset that will be expanded with a click
+// from a user. The effect of this class can be toggled with the jQuery show()
+// and hide() functions.
+@mixin element-hidden {
+  display: none;
+}
+
+@mixin text-invisible {
+  text-indent: -999em;
+}
+
+// Hide elements visually, but keep them available for screen-readers.
+//
+// Used for information required for screen-reader users to understand and use
+// the site where visual display is undesirable. Information provided in this
+// manner should be kept concise, to avoid unnecessary burden on the user.
+// "!important" is used to prevent unintentional overrides.
+@mixin element-invisible {
+  margin: -1px;
+  padding: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip: rect(0, 0, 0, 0);
+  position: absolute;
+}
